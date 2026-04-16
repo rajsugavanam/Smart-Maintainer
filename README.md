@@ -13,6 +13,20 @@
 Keeps stock of items up to a threshold or indefinitely. Uses randomization to prevent crafts, on average, from
 repeatedly taking high priority crafting CPUs and blocking others.
 
+Here's an example using one EBF to continuously level maintain three ingots...
+
+#### Smart Maintainer
+
+<img width="263" height="113" alt="image" src="https://github.com/user-attachments/assets/32601bbb-22df-4728-a140-4f47abb31761" />
+
+Every ingot gets its chance to smelt!
+
+#### Standard OC Maintainer
+
+<img width="249" height="111" alt="image" src="https://github.com/user-attachments/assets/8b245823-72c6-4cda-ad97-2dcd16d31b98" />
+
+Tungstensteel is stuck waiting to craft forever!
+
 ## Requirements
 
 In addition to an functional OpenComputers computer,
