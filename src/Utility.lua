@@ -41,9 +41,13 @@ function randomizeTable(inputTable)
 end
 
 function randomizeKeys(inputTable)
+    return randomizeTable(getKeys(inputTable))
+end
+
+function getKeys(inputTable)
     local keys = {}
     for key, _ in pairs(inputTable) do
         table.insert(keys, key)
     end
-    return randomizeTable(keys)
+    return keys
 end
