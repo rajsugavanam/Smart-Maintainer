@@ -7,6 +7,7 @@
   - [Config](#config)
     - [Items](#items)
     - [Fluids](#fluids)
+  - [Example](#example)
 <!--toc:end-->
 
 Keeps stock of items up to a threshold or indefinitely. Uses randomization to prevent crafts, on average, from
