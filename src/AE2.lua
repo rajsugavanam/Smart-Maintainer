@@ -98,4 +98,16 @@ function AE2.clearCache()
     cacheTimestamp = 0
 end
 
+-- Returns true if none of the items from entries are crafting according to itemsCrafting.
+function AE2.batchReady(entries, itemsCrafting)
+    local batchReady = true
+    for itemName, config in ipairs(entries) do
+        local craftable = getCraftableForItem(itemName)
+        if itemsCrafting[itemName] then
+            batchReady = false
+        end
+    end
+    return batchReady
+end
+
 return AE2

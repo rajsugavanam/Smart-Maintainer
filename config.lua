@@ -1,17 +1,25 @@
 local cfg = {}
 
 cfg["items"] = {
-    {
+    { -- Group 0
         priority = 2,
-        ["drop of Molten Polybenzimidazole"] = {512000, 16000, "molten.polybenzimidazole"},
+        batchMode = false,
+        entries = {
+            ["drop of Molten Polybenzimidazole"] = {512000, 16000, "molten.polybenzimidazole"},
+        }
     },
-    {
+    { -- Group 1
         -- Priority mode: every cycle, recipe groups with higher priority
         -- will be attempted first, default 0 if unspecified (priorityMode = false: recipe groups are randomized in order).
         -- randomizeFrequency = k: every k cycles, the order in which these items are attempted to craft is shuffled (k=0: disable this behavior)
         priority = 3,
-        ["Aluminium Ingot"] = {nil, 16},
-        ["Stainless Steel Ingot"] = {512, 8},
+        -- batchMode = true: items within the group will be crafted only if none are currently being crafted.
+        -- Decreases throughput, increases fairness. Useful for very long recipes.
+        batchMode = true,
+        entries = {
+            ["Aluminium Ingot"] = {nil, 16},
+            ["Stainless Steel Ingot"] = {512, 8},
+        }
     }
 }
 

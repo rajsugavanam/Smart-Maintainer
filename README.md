@@ -43,24 +43,36 @@ Change maintained items in `config.lua`.
 Items are specified within **recipe groups**:
 ```lua
 cfg["items"] = {
-    {
+    { -- Group 0
         priority = 2,
-        ["drop of Molten Polybenzimidazole"] = {512000, 16000, "molten.polybenzimidazole"},
+        batchMode = false,
+        entries = {
+            ["drop of Molten Polybenzimidazole"] = {512000, 16000, "molten.polybenzimidazole"},
+        }
     },
-    {
+    { -- Group 1
         -- Priority mode: every cycle, recipe groups with higher priority
-        -- will be attempted first, default 0 if unspecified
-        -- (priorityMode = false: recipe groups are randomized in order).
-
-        -- randomizeFrequency = k: every k cycles, the order in which
-        -- these items are attempted to craft is shuffled
-        -- (k=0: disable this behavior)
+        -- will be attempted first, default 0 if unspecified (priorityMode = false: recipe groups are randomized in order).
+        -- randomizeFrequency = k: every k cycles, the order in which these items are attempted to craft is shuffled (k=0: disable this behavior)
         priority = 3,
-        ["Aluminium Ingot"] = {nil, 16},
-        ["Stainless Steel Ingot"] = {512, 8},
+        -- batchMode = true: items within the group will be crafted only if none are currently being crafted.
+        -- Decreases throughput, increases fairness. Useful for very long recipes.
+        batchMode = true,
+        entries = {
+            ["Aluminium Ingot"] = {nil, 16},
+            ["Stainless Steel Ingot"] = {512, 8},
+        }
     }
 }
 ```
+
+**priorityMode**: If group *A* has priority *i* and group *B* has priority *j*, items in *A* will be crafted before items in B if *i* > *j*.
+
+**batchMode**: If enabled for a group *A*, items in *A* will only craft if no items from *A* are currently crafting.
+Useful for when all recipes in a group are too slow. Decreases crafting throughput due to lower scheduling frequency,
+but can greatly increase fairness for which items get machine time.
+
+**entries**: Configure the items and fluids in a group.
 
 ### Items
 
@@ -78,3 +90,33 @@ cfg["items"] = {
 
 > [!NOTE]
 > Reboot the computer and rerun `Maintainer` after changing the config values.
+
+> [!CAUTION]
+> Smart blocking can alter the effectiveness of this program.
+
+## Example
+
+You want to passively smelt Stainless Steel, Aluminium, and Black Steel in your very slow EBF.
+The maintainer schedules items in that priority order (based on crafting CPUs).
+
+Stainless Steel is smelted in the EBF, but after one recipe of Aluminium is pushed in, Stainless Steel is
+scheduled again and continues to hog the EBF. Black Steel almost never gets the chance to smelt.
+
+The following group could resolve this problem,
+```lua
+    {
+        priority = 0,
+        batchMode = true,
+        entries = {
+            ["Aluminium Ingot"] = {nil, 16},
+            ["Stainless Steel Ingot"] = {nil, 8},
+            ["Black Steel Ingot"] = {nil, 8},
+        }
+    }
+```
+
+in addition to the following options:
+```lua
+cfg["randomizeFrequency"] = 2
+cfg["priorityMode"] = true
+```

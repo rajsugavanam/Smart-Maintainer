@@ -16,15 +16,17 @@ for i=1, #items do
     idxTable[i] = i
 end
 
-if priorityMode then
-
-    -- Clean up potential unspecified priorities
-    for _, group in ipairs(items) do
-        if group.priority == nil then
-            group.priority = 0
-        end
+-- Clean up potential unspecified priorities and batch mode specifiers
+for _, group in ipairs(items) do
+    if group.priority == nil then
+        group.priority = 0
     end
+    if group.batchMode == nil then
+        group.batchMode = false
+    end
+end
 
+if priorityMode then
     -- Sort based on priority.
     table.sort(items, function (groupA, groupB)
         return groupA.priority > groupB.priority
@@ -36,25 +38,36 @@ while true do
 
     -- randomize recipe groups
     if (not priorityMode) and recipeGroupsRandomized and shuffleLists then
+        logInfo(">> Group order randomized!")
         randomizeTable(idxTable)
     end
 
     for _, randomIdx in ipairs(idxTable) do
         local groupTbl = items[randomIdx]
         if shuffleLists then -- stays false if randomization is disabled.
+            logInfo(">> Scheduling order shuffled for group " .. randomIdx .. "!")
             randomizeTable(groupTbl)
             items[randomIdx] = groupTbl
         end
 
-        for item, config in pairs(groupTbl) do
+        if groupTbl.batchMode == true then
+            local batchReady = ae2.batchReady(groupTbl.entries, itemsCrafting)
+            if (not batchReady) then
+                logInfo("Group " .. randomIdx .. " has batch mode enabled but items still crafting!")
+                goto continue
+            end
+        end
+
+        for item, config in pairs(groupTbl.entries) do
             if itemsCrafting[item] == true then
                 logInfo(item .. " is already being crafted, skipping...")
             else
                 local success, answer = ae2.requestItem(item, config[1], config[2], config[3])
                 logInfo(answer)
             end
-    
         end
+
+        ::continue::
     end
 
     if recipeGroupsRandomized then
