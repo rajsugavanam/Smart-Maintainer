@@ -34,7 +34,7 @@ function logInfo(string)
 end
 
 function randomizeTable(inputTable)
-    for i = #inputTable, 2, -1 do
+    for i = #inputTable, 1, -1 do
         local j = math.random(i)
         inputTable[i], inputTable[j] = inputTable[j], inputTable[i]
     end
