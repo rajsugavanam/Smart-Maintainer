@@ -46,7 +46,7 @@ while true do
         local groupTbl = items[randomIdx]
         if shuffleLists then -- stays false if randomization is disabled.
             logInfo(">> Scheduling order shuffled for group " .. randomIdx .. "!")
-            randomizeTable(groupTbl)
+            randomizeTable(groupTbl.entries)
             items[randomIdx] = groupTbl
         end
 
