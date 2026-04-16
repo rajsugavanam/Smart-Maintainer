@@ -44,13 +44,8 @@ while true do
 
     for _, randomIdx in ipairs(idxTable) do
         local groupTbl = items[randomIdx]
-        local itemKeys = getKeys(groupTbl.entries)
-        if shuffleLists then -- stays false if randomization is disabled.
-            logInfo(">> Scheduling order shuffled for group " .. randomIdx .. "!")
-            itemKeys = randomizeKeys(groupTbl.entries)
-            items[randomIdx] = groupTbl
-        end
 
+        -- skip group if batch isn't ready.
         if groupTbl.batchMode == true then
             local batchReady = ae2.batchReady(groupTbl.entries, itemsCrafting)
             if (not batchReady) then
@@ -58,6 +53,15 @@ while true do
                 goto continue
             end
         end
+        
+        
+        local itemKeys = getKeys(groupTbl.entries)
+        if shuffleLists then -- stays false if randomization is disabled.
+            logInfo(">> Scheduling order shuffled for group " .. randomIdx .. "!")
+            itemKeys = randomizeKeys(groupTbl.entries)
+            items[randomIdx] = groupTbl
+        end
+
 
         for _, item in ipairs(itemKeys) do
             local config = groupTbl.entries[item]
