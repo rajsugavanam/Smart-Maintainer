@@ -40,8 +40,12 @@ cfg["items"] = {
     },
     {
         -- Priority mode: every cycle, recipe groups with higher priority
-        -- will be attempted first, default 0 if unspecified (priorityMode = false: recipe groups are randomized in order).
-        -- randomizeFrequency = k: every k cycles, the order in which these items are attempted to craft is shuffled (k=0: disable this behavior)
+        -- will be attempted first, default 0 if unspecified
+        -- (priorityMode = false: recipe groups are randomized in order).
+
+        -- randomizeFrequency = k: every k cycles, the order in which
+        -- these items are attempted to craft is shuffled
+        -- (k=0: disable this behavior)
         priority = 3,
         ["Aluminium Ingot"] = {2048, 16},
         ["Stainless Steel Ingot"] = {512, 8},
@@ -49,10 +53,17 @@ cfg["items"] = {
 }
 ```
 
-Items: `["item_name"] = {threshold, batch_size}`.
-Fluids: `["item_name"] = {threshold, batch_size, registry_name}`.
- - Find the registry name by hovering over the fluid in NEI.
+### Items
+`["item_name"] = {threshold, batch_size}`.
 
-If you do not require a limit for an item to be stocked up to, set `threshold` to `nil`.
+### Fluids
+`["item_name"] = {threshold, batch_size, registry_name}`.
 
-Reboot the computer and rerun `Maintainer` after changing the config values.
+> [!TIP]
+> Find the registry name of a fluid by hovering over the fluid in NEI.
+
+> [!NOTE]
+> If you do not require a limit for an item to be stocked up to, set `threshold` to `nil`.
+
+> [!NOTE]
+> Reboot the computer and rerun `Maintainer` after changing the config values.
