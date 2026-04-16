@@ -101,7 +101,7 @@ end
 -- Returns true if none of the items from entries are crafting according to itemsCrafting.
 function AE2.batchReady(entries, itemsCrafting)
     local batchReady = true
-    for itemName, config in ipairs(entries) do
+    for itemName, config in pairs(entries) do
         local craftable = getCraftableForItem(itemName)
         if itemsCrafting[itemName] then
             batchReady = false

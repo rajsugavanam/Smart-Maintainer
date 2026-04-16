@@ -47,7 +47,7 @@ while true do
         local itemKeys = getKeys(groupTbl.entries)
         if shuffleLists then -- stays false if randomization is disabled.
             logInfo(">> Scheduling order shuffled for group " .. randomIdx .. "!")
-            itemKeys = randomizeTable(groupTbl.entries)
+            itemKeys = randomizeKeys(groupTbl.entries)
             items[randomIdx] = groupTbl
         end
 
@@ -59,7 +59,7 @@ while true do
             end
         end
 
-        for _, item in pairs(itemKeys) do
+        for _, item in ipairs(itemKeys) do
             local config = groupTbl.entries[item]
             if itemsCrafting[item] == true then
                 logInfo(item .. " is already being crafted, skipping...")

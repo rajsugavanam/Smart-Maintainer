@@ -41,7 +41,9 @@ function randomizeTable(inputTable)
 end
 
 function randomizeKeys(inputTable)
-    return randomizeTable(getKeys(inputTable))
+    local t = getKeys(inputTable)
+    randomizeTable(t)
+    return t
 end
 
 function getKeys(inputTable)
