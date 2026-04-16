@@ -41,7 +41,7 @@ function AE2.requestItem(name, threshold, count, fluidName)
         local item = craftable.getItemStack()
         if threshold ~= nil then
             local itemInSystem = nil
-            
+
             if fluidName then
                 local fluidTag = '{Fluid:' .. fluidName .. '}'
                 itemInSystem = ME.getItemInNetwork("ae2fc:fluid_drop", 0, fluidTag)
@@ -50,19 +50,19 @@ function AE2.requestItem(name, threshold, count, fluidName)
                     if item.tag then
                         itemInSystem = ME.getItemInNetwork(item.name, item.damage or 0, item.tag)
                     end
-                    
+
                     -- Fallback: try with just the internal name and damage
                     if itemInSystem == nil then
                         itemInSystem = ME.getItemInNetwork(item.name, item.damage or 0)
                     end
                 end
             end
-            
-            if itemInSystem ~= nil and itemInSystem.size >= threshold then 
+
+            if itemInSystem ~= nil and itemInSystem.size >= threshold then
                 return table.unpack({false, "The amount of " .. (itemInSystem.label or name) .. " (" .. itemInSystem.size .. ") meets or exceeds threshold (" .. threshold .. ")! Aborting request."})
             end
         end
-        
+
         if item.label == name then
             local craft = craftable.request(count)
 

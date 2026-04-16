@@ -32,3 +32,10 @@ function logInfo(string)
         print("[" .. os.date("%H:%M:%S") .. "] " .. string)
     end
 end
+
+function randomizeTable(inputTable)
+    for i = #inputTable, 2, -1 do
+        local j = math.random(i)
+        inputTable[i], inputTable[j] = inputTable[j], inputTable[i]
+    end
+end
