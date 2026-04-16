@@ -39,3 +39,11 @@ function randomizeTable(inputTable)
         inputTable[i], inputTable[j] = inputTable[j], inputTable[i]
     end
 end
+
+function randomizeKeys(inputTable)
+    local keys = {}
+    for key, _ in pairs(inputTable) do
+        table.insert(keys, key)
+    end
+    return randomizeTable(keys)
+end
