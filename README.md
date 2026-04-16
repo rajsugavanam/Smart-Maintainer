@@ -40,7 +40,7 @@ In addition to an functional OpenComputers computer,
 Download and install in the computer:
 
 ```bash
-wget raw.githubusercontent.com/rajsugavanam/Smart-Maintainer/master/installer.lua && installer
+wget https://raw.githubusercontent.com/rajsugavanam/Smart-Maintainer/master/installer.lua && installer
 ```
 
 This requires an internet card.
