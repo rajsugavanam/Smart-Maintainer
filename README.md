@@ -67,10 +67,10 @@ cfg["items"] = {
 }
 ```
 
-**priorityMode**: If group *A* has priority *i* and group *B* has priority *j*, items in *A* will be crafted before items in B if *i* > *j*.
+**priorityMode**: If group *A* has priority *i* and group *B* has priority *j*, items in *A* will attempt to craft before items in B if *i* > *j*.
 
 **batchMode**: If enabled for a group *A*, items in *A* will only craft if no items from *A* are currently crafting.
-Useful for when all recipes in a group are too slow. Decreases crafting throughput due to lower scheduling frequency,
+Useful *with in-group randomization* for when all recipes in a group are too slow. Decreases crafting throughput due to lower scheduling frequency,
 but can greatly increase fairness for which items get machine time.
 
 **entries**: Configure the items and fluids in a group.
