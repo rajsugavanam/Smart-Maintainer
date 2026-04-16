@@ -1,5 +1,14 @@
 # Smart Maintainer
 
+<!--toc:start-->
+- [Smart Maintainer](#smart-maintainer)
+  - [Requirements](#requirements)
+  - [Installation](#installation)
+  - [Config](#config)
+    - [Items](#items)
+    - [Fluids](#fluids)
+<!--toc:end-->
+
 Keeps stock of items up to a threshold or indefinitely. Uses randomization to prevent crafts, on average, from
 repeatedly taking high priority crafting CPUs and blocking others.
 
@@ -47,16 +56,18 @@ cfg["items"] = {
         -- these items are attempted to craft is shuffled
         -- (k=0: disable this behavior)
         priority = 3,
-        ["Aluminium Ingot"] = {2048, 16},
+        ["Aluminium Ingot"] = {nil, 16},
         ["Stainless Steel Ingot"] = {512, 8},
     }
 }
 ```
 
 ### Items
+
 `["item_name"] = {threshold, batch_size}`.
 
 ### Fluids
+
 `["item_name"] = {threshold, batch_size, registry_name}`.
 
 > [!TIP]
