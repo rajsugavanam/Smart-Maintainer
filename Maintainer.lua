@@ -12,11 +12,11 @@ local shuffleLists = false
 local recipeGroupsRandomized = randomizeFrequency ~= 0
 
 
-function batchReady(groupTbl, itemsCrafting)
+function batchReady(groupTbl, itemsCrafting, groupNumber)
     if groupTbl.batchMode == true then
         local batchReady = ae2.batchReady(groupTbl.entries, itemsCrafting)
         if (not batchReady) then
-            logInfo("Group " .. randGroupIdx .. " has batch mode enabled but items still crafting!")
+            logInfo("Group " .. groupNumber .. " has batch mode enabled but items still crafting!")
             return false
         end
     end
@@ -74,7 +74,7 @@ while true do
         end
 
         -- Step 2: Skip group if batch isn't ready.
-        if (not batchReady(groupTbl, itemsCrafting)) then
+        if (not batchReady(groupTbl, itemsCrafting, randGroupIdx)) then
             goto skipGroup
         end
 
