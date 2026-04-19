@@ -69,7 +69,8 @@ while true do
         -- shuffle in-group items if necessary.
         if shuffleLists then -- stays false if randomization is disabled.
             logInfo(">> Scheduling order shuffled for group " .. randGroupIdx .. "!")
-            groupCache[randGroupIdx] = randomizeTable(itemKeys)
+            randomizeTable(itemKeys)
+            groupCache[randGroupIdx] = itemKeys
         end
 
         -- Step 2: Skip group if batch isn't ready.
