@@ -40,11 +40,6 @@ function randomizeTable(inputTable)
     end
 end
 
-function randomizeKeys(inputTable)
-    local t = getKeys(inputTable)
-    randomizeTable(t)
-    return t
-end
 
 function getKeys(inputTable)
     local keys = {}
@@ -52,4 +47,13 @@ function getKeys(inputTable)
         table.insert(keys, key)
     end
     return keys
+end
+
+function setupGroupCache(groups)
+    local groupCache = {}
+    for i = 1, #groups do
+        local entries = groups[i].entries
+        groupCache[i] = getKeys(entries)
+    end
+    return groupCache
 end

@@ -2,7 +2,7 @@ local ae2 = require("src.AE2")
 local cfg = require("config")
 local util = require("src.Utility") 
 
-local items = cfg.items
+local groups = cfg.items
 local sleepInterval = cfg.sleep
 local randomizeFrequency = cfg.randomizeFrequency
 local priorityMode = cfg.priorityMode
@@ -11,13 +11,30 @@ local shuffleCounter = 0
 local shuffleLists = false
 local recipeGroupsRandomized = randomizeFrequency ~= 0
 
+
+function batchReady(groupTbl, itemsCrafting)
+    if groupTbl.batchMode == true then
+        local batchReady = ae2.batchReady(groupTbl.entries, itemsCrafting)
+        if (not batchReady) then
+            logInfo("Group " .. randGroupIdx .. " has batch mode enabled but items still crafting!")
+            return false
+        end
+    end
+    return true
+end
+
+
+logInfo("Setting up group cache...")
+local groupCache = setupGroupCache(groups)
+logInfo("Group cache initialized.")
+
 local idxTable = {}
-for i=1, #items do
+for i=1, #groups do
     idxTable[i] = i
 end
 
 -- Clean up potential unspecified priorities and batch mode specifiers
-for _, group in ipairs(items) do
+for _, group in ipairs(groups) do
     if group.priority == nil then
         group.priority = 0
     end
@@ -28,7 +45,7 @@ end
 
 if priorityMode then
     -- Sort based on priority.
-    table.sort(items, function (groupA, groupB)
+    table.sort(groups, function (groupA, groupB)
         return groupA.priority > groupB.priority
     end)
 end
@@ -42,27 +59,25 @@ while true do
         randomizeTable(idxTable)
     end
 
-    for _, randomIdx in ipairs(idxTable) do
-        local groupTbl = items[randomIdx]
+    for _, randGroupIdx in ipairs(idxTable) do
+        local groupTbl = groups[randGroupIdx]
 
-        -- skip group if batch isn't ready.
-        if groupTbl.batchMode == true then
-            local batchReady = ae2.batchReady(groupTbl.entries, itemsCrafting)
-            if (not batchReady) then
-                logInfo("Group " .. randomIdx .. " has batch mode enabled but items still crafting!")
-                goto continue
-            end
-        end
-        
-        
-        local itemKeys = getKeys(groupTbl.entries)
+        logInfo("=== Group " .. randGroupIdx .. " =============")
+
+        -- Step 1: Randomize if necessary.
+        local itemKeys = groupCache[randGroupIdx]
+        -- shuffle in-group items if necessary.
         if shuffleLists then -- stays false if randomization is disabled.
-            logInfo(">> Scheduling order shuffled for group " .. randomIdx .. "!")
-            itemKeys = randomizeKeys(groupTbl.entries)
-            items[randomIdx] = groupTbl
+            logInfo(">> Scheduling order shuffled for group " .. randGroupIdx .. "!")
+            groupCache[randGroupIdx] = randomizeTable(itemKeys)
         end
 
+        -- Step 2: Skip group if batch isn't ready.
+        if (not batchReady(groupTbl, itemsCrafting)) then
+            goto skipGroup
+        end
 
+        -- Step 3: Craft items in group.
         for _, item in ipairs(itemKeys) do
             local config = groupTbl.entries[item]
             if itemsCrafting[item] == true then
@@ -73,9 +88,10 @@ while true do
             end
         end
 
-        ::continue::
+        ::skipGroup::
     end
 
+    -- Update flag that indicates groups should be randomized.
     if recipeGroupsRandomized then
         shuffleLists = (shuffleCounter == 0)
         shuffleCounter = (shuffleCounter + 1) % randomizeFrequency
