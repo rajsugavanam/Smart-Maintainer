@@ -24,7 +24,7 @@ local function getCraftableForItem(itemName)
     end
     
     -- Look for this specific item in craftables
-    local craftables = ME.getCraftables({["label"] = itemName})
+    local craftables = ME.getCraftables()
     if #craftables >= 1 then
         itemCache[itemName] = craftables[1] -- Cache only this one item
         return craftables[1]
@@ -38,23 +38,18 @@ function AE2.requestItem(name, threshold, count, fluidName)
     local craftable = getCraftableForItem(name)
 
     if craftable then
-        local item = craftable.getItemStack()
+        local item = craftable.getStack()
         if threshold ~= nil then
             local itemInSystem = nil
 
-            if fluidName then
-                local fluidTag = '{Fluid:' .. fluidName .. '}'
-                itemInSystem = ME.getItemInNetwork("ae2fc:fluid_drop", 0, fluidTag)
-            else
-                if item.name then
-                    if item.tag then
-                        itemInSystem = ME.getItemInNetwork(item.name, item.damage or 0, item.tag)
-                    end
+            if item.name then
+                if item.tag then
+                    itemInSystem = ME.getItemInNetwork(item.name, item.damage or 0, item.tag)
+                end
 
-                    -- Fallback: try with just the internal name and damage
-                    if itemInSystem == nil then
-                        itemInSystem = ME.getItemInNetwork(item.name, item.damage or 0)
-                    end
+                -- Fallback: try with just the internal name and damage
+                if itemInSystem == nil then
+                    itemInSystem = ME.getItemInNetwork(item.name, item.damage or 0)
                 end
             end
 
