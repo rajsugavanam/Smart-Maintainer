@@ -34,7 +34,7 @@ local function getCraftableForItem(itemName)
     return nil
 end
 
-function AE2.requestItem(name, threshold, count, fluidName)
+function AE2.requestItem(name, threshold, count, fluidRegistry)
     local craftable = getCraftableForItem(name)
 
     if craftable then
@@ -42,14 +42,18 @@ function AE2.requestItem(name, threshold, count, fluidName)
         if threshold ~= nil then
             local itemInSystem = nil
 
-            if item.name then
-                if item.tag then
-                    itemInSystem = ME.getItemInNetwork(item.name, item.damage or 0, item.tag)
-                end
+            if fluidRegistry then
+                itemInSystem = ME.getFluidInNetwork(fluidRegistry)
+            else
+                if item.name then
+                    if item.tag then
+                        itemInSystem = ME.getItemInNetwork(item.name, item.damage or 0, item.tag)
+                    end
 
-                -- Fallback: try with just the internal name and damage
-                if itemInSystem == nil then
-                    itemInSystem = ME.getItemInNetwork(item.name, item.damage or 0)
+                    -- Fallback: try with just the internal name and damage
+                    if itemInSystem == nil then
+                        itemInSystem = ME.getItemInNetwork(item.name, item.damage or 0)
+                    end
                 end
             end
 
