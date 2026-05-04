@@ -24,7 +24,7 @@ local function getCraftableForItem(itemName)
     end
     
     -- Look for this specific item in craftables
-    local craftables = ME.getCraftables()
+    local craftables = ME.getCraftables({["label"] = itemName})
     if #craftables >= 1 then
         itemCache[itemName] = craftables[1] -- Cache only this one item
         return craftables[1]
